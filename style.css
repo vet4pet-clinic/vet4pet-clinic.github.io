@@ -5,7 +5,6 @@
 :root {
   --blue: #005A78;
   --teal: #0FB7BA;
-  --gray: #999999;
   --text: #1f2a32;
 }
 
@@ -19,21 +18,16 @@ body {
   line-height: 1.6;
 }
 
-/* затемнение при прокрутке */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(1px);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(2px);
   z-index: -1;
-  transition: background 0.6s ease;
-}
-body.scrolled::before {
-  background: rgba(255,255,255,0.85);
 }
 
-/* контейнер */
+/* === КОНТЕЙНЕР === */
 .container {
   max-width: 1100px;
   margin: 0 auto;
@@ -45,10 +39,11 @@ body.scrolled::before {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(255,255,255,0.95);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0,0,0,0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
+
 .topbar .row {
   display: flex;
   flex-wrap: wrap;
@@ -57,39 +52,49 @@ body.scrolled::before {
   padding: 6px 0;
 }
 
-/* логотип */
+/* === ЛОГОТИП === */
 .brand {
   display: flex;
   align-items: center;
   gap: 10px;
 }
+
 .brand img.logo {
-  width: 110px;
+  width: 100px;
   height: auto;
-  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.25));
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
 }
+
 .brand .title {
   font-size: 1.2rem;
   font-weight: 700;
   color: var(--blue);
 }
 
-/* контакты */
+/* === КОНТАКТЫ === */
 .info {
   display: flex;
   align-items: center;
   gap: 8px;
 }
+
 .info img {
   height: 20px;
   width: 20px;
 }
 
-/* навигация */
+/* === НАВИГАЦИЯ === */
 nav {
   background: var(--blue);
   text-align: center;
 }
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 nav a {
   color: #fff;
   display: inline-block;
@@ -97,39 +102,80 @@ nav a {
   font-weight: 600;
   text-decoration: none;
 }
+
 nav a:hover {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
 }
 
-/* компактная версия для телефона */
-@media (max-width: 700px) {
+/* === ГАМБУРГЕР === */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.bar {
+  height: 3px;
+  width: 25px;
+  background-color: white;
+  margin: 4px 0;
+  transition: 0.3s;
+}
+
+/* === МОБИЛЬНАЯ ВЕРСИЯ === */
+@media (max-width: 768px) {
   .topbar .row {
     flex-direction: column;
     text-align: center;
   }
+
   .info {
     flex-wrap: wrap;
     justify-content: center;
   }
-  nav a {
-    display: block;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
+
+  .menu-toggle {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .nav-list {
+    display: none;
+    flex-direction: column;
+    background-color: var(--blue);
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-list.active {
+    display: flex;
+  }
+
+  .brand img.logo {
+    width: 85px;
+  }
+
+  .brand .title {
+    font-size: 1rem;
   }
 }
 
 /* === СЕКЦИИ === */
 section {
   padding: 50px 0;
-  background: rgba(255,255,255,0.88);
-  border-bottom: 1px solid rgba(0,0,0,0.05);
+  background: rgba(255, 255, 255, 0.88);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
+
 section.visible {
   opacity: 1;
   transform: translateY(0);
 }
+
 h2 {
   text-align: center;
   color: var(--blue);
@@ -149,21 +195,30 @@ h2 {
   cursor: pointer;
   transition: opacity 0.2s;
 }
+
 .btn:hover {
   opacity: 0.9;
 }
 
 /* === ВРАЧИ === */
 #doctors .doctors {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 25px;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
+  gap: 25px;
 }
+
 #doctors img {
-  width: 260px;
+  width: 240px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#doctors p {
+  max-width: 420px;
+  line-height: 1.5;
+  text-align: justify;
 }
 
 /* === ФОРМА === */
@@ -174,9 +229,11 @@ form {
   background: #fff;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
-form input, form textarea {
+
+form input,
+form textarea {
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 8px;
@@ -186,9 +243,10 @@ form input, form textarea {
 /* === СОЦСЕТИ === */
 .socials {
   text-align: center;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255, 255, 255, 0.9);
   padding: 40px 0;
 }
+
 .socials a {
   color: var(--blue);
   margin: 0 8px;
@@ -198,15 +256,16 @@ form input, form textarea {
 /* === КОТ И СОБАКА === */
 .pet-banner {
   text-align: center;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255, 255, 255, 0.9);
   padding: 40px 0 20px;
 }
+
 .pet-banner img {
-  max-width: 800px; /* увеличено в 2 раза */
+  max-width: 800px;
   width: 90%;
   height: auto;
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* === ФУТЕР === */
@@ -233,6 +292,7 @@ footer {
   align-items: center;
   z-index: 2000;
 }
+
 .cookie-btn {
   background: var(--teal);
   border: none;
@@ -243,16 +303,14 @@ footer {
   cursor: pointer;
 }
 
-/* адаптация кота/собаки и шапки */
+/* === АДАПТАЦИЯ === */
 @media (max-width: 700px) {
-  .brand img.logo {
-    width: 90px;
-  }
-  .brand .title {
-    font-size: 1rem;
-  }
   .pet-banner img {
     max-width: 500px;
     width: 100%;
+  }
+
+  #doctors img {
+    width: 180px;
   }
 }
