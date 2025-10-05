@@ -14,7 +14,8 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: url('background.webp') center/contain no-repeat;
+  background: url('background.webp') center center no-repeat;
+  background-size: contain;
   opacity: 0.08;
   z-index: -1;
 }
@@ -44,6 +45,7 @@ body::before {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .brand .logo {
@@ -55,6 +57,12 @@ body::before {
   font-size: 22px;
   font-weight: bold;
   color: #006a80;
+}
+
+.brand .subtitle {
+  font-size: 14px;
+  color: #0098b2;
+  font-weight: 600;
 }
 
 .info {
@@ -133,6 +141,12 @@ p {
   background: #007f96;
 }
 
+/* Центрируем кнопку */
+.cta {
+  text-align: center;
+  margin-top: 20px;
+}
+
 /* === ВРАЧИ === */
 .doctors {
   display: flex;
@@ -175,7 +189,8 @@ p {
   margin-bottom: 8px;
 }
 
-.card .btn {
+.card details summary {
+  cursor: pointer;
   margin-top: 10px;
 }
 
@@ -291,12 +306,23 @@ footer {
 
 /* === МОБИЛЬНАЯ ВЕРСИЯ === */
 @media (max-width: 768px) {
+  .brand {
+    justify-content: center;
+    text-align: center;
+  }
+
   .brand .logo {
-    height: 50px;
+    height: 55px;
   }
 
   .brand .title {
     font-size: 18px;
+  }
+
+  .brand .subtitle {
+    font-size: 12px;
+    text-align: center;
+    width: 100%;
   }
 
   nav a {
@@ -315,5 +341,10 @@ footer {
 
   .pet-banner img {
     width: 95%;
+  }
+
+  body::before {
+    background-size: cover;
+    opacity: 0.1;
   }
 }
