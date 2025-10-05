@@ -73,3 +73,21 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     }
   });
 });
+/* === активный пункт меню при скролле === */
+const navLinks = Array.from(document.querySelectorAll('nav .menu a'));
+const sections = navLinks
+  .map(a => document.querySelector(a.getAttribute('href')))
+  .filter(Boolean);
+
+const setActive = () => {
+  const y = window.scrollY + 120; // небольшой отступ от шапки
+  let current = null;
+  sections.forEach(sec => {
+    if (y >= sec.offsetTop) current = sec.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('is-active', a.getAttribute('href') === `#${current}`);
+  });
+};
+window.addEventListener('scroll', setActive);
+window.addEventListener('load', setActive);
