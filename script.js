@@ -1,6 +1,6 @@
-/* =============================
+/* ===============================
    Vet4Pet — функционал сайта
-   ============================= */
+================================= */
 
 /* === 1. ЭФФЕКТ ЗАТЕМНЕНИЯ ПРИ ПРОКРУТКЕ === */
 window.addEventListener('scroll', () => {
@@ -17,7 +17,6 @@ function acceptCookies() {
   document.querySelector('.cookie-bar').style.display = 'none';
 }
 
-// Показать баннер, если пользователь ещё не принял cookies
 window.addEventListener('DOMContentLoaded', () => {
   const accepted = localStorage.getItem('cookiesAccepted');
   if (!accepted) {
@@ -29,47 +28,48 @@ window.addEventListener('DOMContentLoaded', () => {
 function openTelegramChat(event) {
   event.preventDefault();
 
-  const name = document.getElementById('name').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const comment = document.getElementById('comment').value.trim();
+  const name = document.getElementById('name')?.value.trim();
+  const phone = document.getElementById('phone')?.value.trim();
+  const comment = document.getElementById('comment')?.value.trim();
 
   if (!name || !phone) {
-    alert("Пожалуйста, заполните имя и телефон 😊");
+    alert('Пожалуйста, заполните имя и телефон.');
     return;
   }
 
-  const message = `🩺 Заявка с сайта Vet4Pet%0AИмя: ${encodeURIComponent(name)}%0AТелефон: ${encodeURIComponent(phone)}%0AКомментарий: ${encodeURIComponent(comment)}`;
-  const telegramLink = `https://t.me/vet4pet_minsk?text=${message}`;
+  const message =
+    `🐾 *Новая заявка с сайта Vet4Pet* 🐾\n\n` +
+    `👤 Имя: ${name}\n📞 Телефон: ${phone}\n💬 Комментарий: ${comment || '—'}`;
 
-  window.open(telegramLink, '_blank');
+  const botToken = 'ТВОЙ_ТОКЕН_БОТА';
+  const chatId = 'ТВОЙ_CHAT_ID';
+  const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+  fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'Markdown' }),
+  })
+    .then((res) => {
+      if (res.ok) {
+        alert('Заявка отправлена! Мы свяжемся с вами.');
+        document.querySelector('form').reset();
+      } else {
+        alert('Ошибка при отправке. Попробуйте позже.');
+      }
+    })
+    .catch(() => {
+      alert('Ошибка соединения. Попробуйте позже.');
+    });
 }
 
-/* === 4. ПЛАВНАЯ ПРОКРУТКА ПО МЕНЮ === */
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+/* === 4. ПЛАВНАЯ ПРОКРУТКА ПО ЯКОРЯМ === */
+document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener('click', function (e) {
-    const targetId = this.getAttribute('href');
-    if (targetId && targetId.startsWith('#')) {
-      e.preventDefault();
-      const target = document.querySelector(targetId);
-      if (target) {
-        window.scrollTo({
-          top: target.offsetTop - 80,
-          behavior: 'smooth'
-        });
-      }
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
     }
   });
-});
-
-/* === 5. ПЛАВНОЕ ПОЯВЛЕНИЕ СЕКЦИЙ === */
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.2 });
-
-document.querySelectorAll('section').forEach(section => {
-  observer.observe(section);
 });
