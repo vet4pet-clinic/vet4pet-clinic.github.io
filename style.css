@@ -1,34 +1,54 @@
 /* ====== VET4PET — стили ====== */
 
-/* Базовые переменные */
-:root {
-  --blue: #005A78;
-  --teal: #0FB7BA;
-  --text: #152126;
-  --card: rgba(255,255,255,.88);
-  --shadow: 0 6px 18px rgba(16,24,40,.06);
+/* Палитра и параметры */
+:root{
+  --blue:#005A78;
+  --teal:#0FB7BA;
+  --text:#152126;
+  --card:rgba(255,255,255,.88);
+  --shadow:0 6px 18px rgba(16,24,40,.06);
+  /* подложка-логотип: размер тайла и видимость */
+  --bg-logo-size: clamp(140px,16vw,240px);
+  --bg-logo-opacity: 0.18; /* ↑ сделано заметнее; можно 0.20–0.25 */
 }
 
-/* Фон + типографика */
+/* База + фон */
+html,body{height:100%}
 body{
   margin:0;
   font-family:'Uni Sans',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   color:var(--text);
   line-height:1.55;
-  /* подложка: полупрозрачная вуаль поверх логотипа */
-  background:
-    linear-gradient(rgba(255,255,255,.92), rgba(255,255,255,.92)),
-    url('background.webp') center center / contain no-repeat fixed,
-    #f5f7f8;
+  background:#f5f7f8; /* базовый цвет */
+  position:relative;
+  overflow-x:hidden;
+}
+/* МНОГО мелких логотипов — тайловый фон */
+body::before{
+  content:"";
+  position:fixed; inset:0;
+  background-image:url("background.webp");
+  background-repeat:repeat;
+  background-size: var(--bg-logo-size) auto;
+  background-position: top left;
+  opacity:var(--bg-logo-opacity);
+  z-index:-1;
+  pointer-events:none;
 }
 
 /* Контейнер */
 .container{width:min(1100px,92%);margin:0 auto}
 
 /* ===== ШАПКА ===== */
-.topbar{background:#fff;border-bottom:3px solid var(--blue);padding:10px 0}
-.topbar .row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
-
+.topbar{
+  background:#fff;
+  border-bottom:3px solid var(--blue);
+  padding:10px 0;
+}
+.topbar .row{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:14px;flex-wrap:wrap;
+}
 .brand{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .brand .logo{height:70px;width:auto}
 .brand .title{font-weight:800;color:var(--blue);font-size:22px}
@@ -38,30 +58,67 @@ body{
 .info a{color:var(--teal);text-decoration:none;font-weight:800}
 .messengers img{width:20px;height:20px}
 
-/* Навигация */
-nav{background:var(--blue)}
-nav .menu{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-nav a{color:#fff;text-decoration:none;padding:10px 14px;font-weight:800;border-radius:8px}
-nav a:hover{background:rgba(255,255,255,.14)}
+/* ===== Меню — современный вид ===== */
+nav{
+  position:sticky; top:0; z-index:500;
+  background:var(--blue);
+  box-shadow:0 8px 24px rgba(0,0,0,.06);
+}
+nav .menu{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+nav a{
+  position:relative;
+  color:#fff;
+  text-decoration:none;
+  padding:12px 14px;
+  font-weight:900;
+  letter-spacing:.2px;
+  border-radius:10px;
+}
+/* деликатная подсветка под пунктом */
+nav a::after{
+  content:"";
+  position:absolute; left:12px; right:12px; bottom:6px;
+  height:2px; background:var(--teal);
+  transform:scaleX(0); transform-origin:left;
+  transition:transform .25s ease;
+}
+nav a:hover::after, nav a.is-active::after{ transform:scaleX(1) }
 
-/* ===== СЕКЦИИ ===== */
+/* ===== Секции ===== */
 section{padding:clamp(36px,6vw,60px) 0}
-h2{margin:0 0 16px;text-align:center;color:#004c5c;font-size:clamp(22px,3.4vw,30px)}
-p{margin:0 0 12px} /* по умолчанию выравнивание слева */
+h2{
+  margin:0 0 14px;
+  text-align:center;
+  color:#004c5c;
+  font-size:clamp(22px,3.4vw,30px)
+}
+/* актуальная типографика — слева, плотнее */
+p{margin:0 0 12px; text-align:left}
 
-/* Центровка CTA-кнопок */
+/* Кнопка в центре */
 .cta{display:flex;justify-content:center;margin-top:16px}
-.btn{background:var(--teal);color:#fff;border:none;padding:11px 18px;border-radius:10px;font-weight:900;cursor:pointer;text-decoration:none;box-shadow:var(--shadow)}
+.btn{
+  background:var(--teal); color:#fff; border:none;
+  padding:11px 18px; border-radius:10px;
+  font-weight:900; cursor:pointer; text-decoration:none;
+  box-shadow:var(--shadow);
+}
 .btn:hover{opacity:.92}
 
-/* ===== ВРАЧИ ===== */
-.doctors{display:grid;grid-template-columns:1fr 1.25fr;gap:22px;align-items:center}
+/* ===== Врачи ===== */
+.doctors{
+  display:grid; grid-template-columns:1fr 1.2fr;
+  gap:22px; align-items:center
+}
 .doc-photo img{width:min(340px,100%);border-radius:14px;box-shadow:var(--shadow)}
-.doc-text p{max-width:640px}
+.doc-text p{max-width:680px}
 
-/* ===== УСЛУГИ (только заголовок + Подробнее) ===== */
+/* ===== Услуги — только заголовок + Подробнее ===== */
 .services{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-.card{background:var(--card);border-radius:14px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px}
+.card{
+  background:var(--card); border-radius:14px; padding:18px;
+  box-shadow:var(--shadow); display:flex; flex-direction:column; gap:8px
+}
 .card .title{font-weight:900;color:#004c5c}
 .card details{margin-top:6px}
 .card details[open]{background:rgba(255,255,255,.6);border-radius:10px;padding:8px}
@@ -69,31 +126,50 @@ p{margin:0 0 12px} /* по умолчанию выравнивание слев�
 .card summary::-webkit-details-marker{display:none}
 .card summary.btn{display:inline-block}
 
-/* ===== ЗАПИСЬ + КОНТАКТЫ (две колонки) ===== */
-.contact-section{display:grid;grid-template-columns:1fr 1fr;gap:28px}
-form,.contacts{background:var(--card);border-radius:12px;padding:20px;box-shadow:var(--shadow)}
+/* ===== Запись + контакты (2 колонки) ===== */
+.contact-section{
+  display:grid; grid-template-columns:1fr 1fr; gap:28px
+}
+form,.contacts{
+  background:var(--card); border-radius:12px; padding:20px; box-shadow:var(--shadow)
+}
 label{display:block;font-weight:800;margin:8px 0 6px}
-input,textarea{width:100%;border:1px solid #d9e1e4;border-radius:10px;padding:11px 12px;font-size:16px}
+input,textarea{
+  width:100%;border:1px solid #d9e1e4;border-radius:10px;
+  padding:11px 12px;font-size:16px
+}
 textarea{min-height:110px;resize:vertical}
 .note{font-size:12px;color:#55636b;margin-top:6px}
 
-/* ===== СОЦСЕТИ ===== */
+/* ===== Соцсети ===== */
 .socials .icons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-.socials a{display:flex;align-items:center;gap:8px;color:#004c5c;font-weight:800;text-decoration:none;background:#fff;border:1px solid #e3ebee;border-radius:10px;padding:8px 12px;box-shadow:var(--shadow)}
+.socials a{
+  display:flex;align-items:center;gap:8px;
+  color:#004c5c;font-weight:800;text-decoration:none;
+  background:#fff;border:1px solid #e3ebee;border-radius:10px;
+  padding:8px 12px; box-shadow:var(--shadow)
+}
 .socials img{width:18px;height:18px}
 
-/* ===== КОТ И СОБАКА ===== */
+/* ===== Кот и собака ===== */
 .pet-banner{text-align:center}
 .pet-banner img{width:min(850px,80vw);height:auto;border-radius:12px;box-shadow:var(--shadow)}
 
-/* ===== ФУТЕР ===== */
+/* ===== Футер ===== */
 footer{background:var(--blue);color:#fff;text-align:center;padding:16px;font-size:14px}
 
-/* ===== COOKIE ===== */
-.cookie-bar{display:none;position:fixed;left:0;right:0;bottom:0;padding:14px 16px;background:#004c5c;color:#fff;z-index:999;display:none;align-items:center;justify-content:space-between;gap:12px}
-.cookie-btn{background:var(--teal);border:none;color:#00313f;font-weight:900;border-radius:9px;padding:9px 14px;cursor:pointer}
+/* ===== Cookie ===== */
+.cookie-bar{
+  display:none; position:fixed; left:0; right:0; bottom:0;
+  padding:14px 16px; background:#004c5c; color:#fff; z-index:999;
+  align-items:center; justify-content:space-between; gap:12px
+}
+.cookie-btn{
+  background:var(--teal); border:none; color:#00313f; font-weight:900;
+  border-radius:9px; padding:9px 14px; cursor:pointer
+}
 
-/* ===== АДАПТАЦИЯ ===== */
+/* ===== Адаптация ===== */
 @media (max-width:980px){
   .doctors{grid-template-columns:1fr;justify-items:center;text-align:left}
 }
@@ -105,11 +181,6 @@ footer{background:var(--blue);color:#fff;text-align:center;padding:16px;font-siz
   .messengers img{width:16px;height:16px}
   .contact-section{grid-template-columns:1fr}
   .socials img{width:14px;height:14px}
-  /* на мобиле подложка чуть крупнее и заметнее */
-  body{
-    background:
-      linear-gradient(rgba(255,255,255,.92), rgba(255,255,255,.92)),
-      url('background.webp') center 12% / 95vw auto no-repeat fixed,
-      #f5f7f8;
-  }
+  /* на мобиле тайл чуть больше, чтобы был заметнее */
+  :root{ --bg-logo-size: clamp(120px,22vw,220px); --bg-logo-opacity: 0.22; }
 }
