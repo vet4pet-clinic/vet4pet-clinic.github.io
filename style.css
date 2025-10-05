@@ -182,5 +182,5 @@ footer{background:var(--blue);color:#fff;text-align:center;padding:16px;font-siz
   .contact-section{grid-template-columns:1fr}
   .socials img{width:14px;height:14px}
   /* на мобиле тайл чуть больше, чтобы был заметнее */
-  :root{ --bg-logo-size: clamp(120px,22vw,220px); --bg-logo-opacity: 0.22; }
+  :root{ --bg-logo-size: clamp(120px,22vw,220px); --bg-logo-opacity: 0.45; }
 }
