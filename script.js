@@ -1,41 +1,62 @@
+/* =============================
+   Vet4Pet — функционал сайта
+   ============================= */
 
-// =========================
-//  Cookie уведомление
-// =========================
-const COOKIE_KEY = "vet4pet_cookie_consent_v1";
-
-function showCookieBar() {
-  const consent = localStorage.getItem(COOKIE_KEY);
-  if (!consent) {
-    const bar = document.querySelector(".cookie-bar");
-    if (bar) bar.style.display = "flex";
+/* === 1. ЭФФЕКТ ЗАТЕМНЕНИЯ ПРИ ПРОКРУТКЕ === */
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) {
+    document.body.classList.add('scrolled');
+  } else {
+    document.body.classList.remove('scrolled');
   }
-}
+});
 
+/* === 2. COOKIE-БАННЕР === */
 function acceptCookies() {
-  localStorage.setItem(COOKIE_KEY, JSON.stringify({ accepted: true, date: Date.now() }));
-  const bar = document.querySelector(".cookie-bar");
-  if (bar) bar.style.display = "none";
+  localStorage.setItem('cookiesAccepted', 'true');
+  document.querySelector('.cookie-bar').style.display = 'none';
 }
 
-document.addEventListener("DOMContentLoaded", showCookieBar);
+// Показать баннер, если пользователь ещё не принял cookies
+window.addEventListener('DOMContentLoaded', () => {
+  const accepted = localStorage.getItem('cookiesAccepted');
+  if (!accepted) {
+    document.querySelector('.cookie-bar').style.display = 'flex';
+  }
+});
 
-// =========================
-//  Отправка формы в Telegram
-// =========================
-function openTelegramChat(e) {
-  e.preventDefault();
+/* === 3. ОТПРАВКА В TELEGRAM === */
+function openTelegramChat(event) {
+  event.preventDefault();
 
-  const name = document.getElementById("name").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const comment = document.getElementById("comment").value.trim();
+  const name = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const comment = document.getElementById('comment').value.trim();
 
   if (!name || !phone) {
-    alert("Пожалуйста, введите имя и телефон");
+    alert("Пожалуйста, заполните имя и телефон 😊");
     return;
   }
 
-  const message = `🐾 Новая заявка Vet4Pet:%0AИмя: ${name}%0AТелефон: ${phone}%0AКомментарий: ${comment}`;
-  const link = `https://t.me/vet4pet_minsk?text=${message}`;
-  window.open(link, "_blank");
+  const message = `🩺 Заявка с сайта Vet4Pet%0AИмя: ${encodeURIComponent(name)}%0AТелефон: ${encodeURIComponent(phone)}%0AКомментарий: ${encodeURIComponent(comment)}`;
+  const telegramLink = `https://t.me/vet4pet_minsk?text=${message}`;
+
+  window.open(telegramLink, '_blank');
 }
+
+/* === 4. ПЛАВНАЯ ПРОКРУТКА ПО МЕНЮ === */
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    const targetId = this.getAttribute('href');
+    if (targetId && targetId.startsWith('#')) {
+      e.preventDefault();
+      const target = document.querySelector(targetId);
+      if (target) {
+        window.scrollTo({
+          top: target.offsetTop - 80,
+          behavior: 'smooth'
+        });
+      }
+    }
+  });
+});
